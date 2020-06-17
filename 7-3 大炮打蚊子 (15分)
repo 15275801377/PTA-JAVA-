@@ -1,0 +1,108 @@
+7-3 大炮打蚊子 (15分)
+现在，我们用大炮来打蚊子：蚊子分布在一个M×N格的二维平面上，每只蚊子占据一格。向该平面的任意位置发射炮弹，炮弹的杀伤范围如下示意：
+
+ O
+OXO
+ O
+其中，X为炮弹落点中心，O为紧靠中心的四个有杀伤力的格子范围。若蚊子被炮弹命中（位于X格），一击毙命，若仅被杀伤（位于O格），则损失一半的生命力。也就是说，一次命中或者两次杀伤均可消灭蚊子。现在给出蚊子的分布情况以及连续k发炮弹的落点，给出每炮消灭的蚊子数。
+
+输入格式:
+第一行为两个不超过20的正整数M和N，中间空一格，表示二维平面有M行、N列。
+
+接下来M行，每行有N个0或者#字符，其中#表示所在格子有蚊子。
+
+接下来一行，包含一个不超过400的正整数k，表示发射炮弹的数量。
+
+最后k行，每行包括一发炮弹的整数坐标x和y（0≤x<M，0≤y<N），之间用一个空格间隔。
+
+输出格式:
+对应输入的k发炮弹，输出共有k行，第i行即第i发炮弹消灭的蚊子数。
+
+输入样例:
+5 6
+00#00#
+000###
+00#000
+000000
+00#000
+2
+1 2
+1 4
+输出样例:
+0
+2
+作者
+周强
+单位
+青岛大学
+代码长度限制
+16 KB
+时间限制
+400 ms
+内存限制
+64 MB
+Java (javac 1.8.0)
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		int n1,m1;
+		Scanner sc=new Scanner(System.in);
+		n1=sc.nextInt();
+		m1=sc.nextInt();
+		int [][]c=new int [n1][m1];
+		String s;
+		sc.nextLine();
+		for(int i=0;i<n1;i++) {	
+			s=sc.nextLine();
+//			System.out.println(s);
+			for(int j=0;j<m1;j++) {
+				if(s.charAt(j)=='0')c[i][j]=0;
+				else c[i][j]=2;
+			}
+		}
+		int n,m,k=0,t=sc.nextInt();
+		int []l=new int [t];
+		while(k<t) {
+			n=sc.nextInt();
+			m=sc.nextInt();
+			if(c[n][m]>0)l[k]++;
+			c[n][m]-=2;
+			if(n>0&&c[n-1][m]>0) {
+				if(c[n-1][m]==1) {
+					l[k]++;
+					c[n-1][m]=0;
+				}else {
+					c[n-1][m]--;
+				}
+			}
+			if(m>0&&c[n][m-1]>0) {
+				if(c[n][m-1]==1) {
+					l[k]++;
+					c[n][m-1]=0;
+				}else {
+					c[n][m-1]--;
+				}
+			}
+			if(n<n1-1&&c[n+1][m]>0) {
+				if(c[n+1][m]==1) {
+					l[k]++;
+					c[n+1][m]=0;
+				}else {
+					c[n+1][m]--;
+				}
+			}
+			if(m<m1-1&&c[n][m+1]>0) {
+				if(c[n][m+1]==1) {
+					l[k]++;
+					c[n][m+1]=0;
+				}else {
+					c[n][m+1]--;
+				}
+			}
+			k++;
+		}
+		for(int i=0;i<t;i++)System.out.println(l[i]);
+	}
+}
