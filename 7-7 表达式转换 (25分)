@@ -1,0 +1,96 @@
+7-7 表达式转换 (25分)
+算术表达式有前缀表示法、中缀表示法和后缀表示法等形式。日常使用的算术表达式是采用中缀表示法，即二元运算符位于两个运算数中间。请设计程序将中缀表达式转换为后缀表达式。
+
+输入格式:
+输入在一行中给出不含空格的中缀表达式，可包含+、-、*、\以及左右括号()，表达式不超过20个字符。
+
+输出格式:
+在一行中输出转换后的后缀表达式，要求不同对象（运算数、运算符号）之间以空格分隔，但结尾不得有多余空格。
+
+输入样例:
+2+3*(7-4)+8/4
+输出样例:
+2 3 7 4 - * + 8 4 / +
+作者
+DS课程组
+单位
+浙江大学
+代码长度限制
+16 KB
+时间限制
+400 ms
+内存限制
+64 MB
+Java (javac 1.8.0)
+
+import java.util.Scanner;
+
+public class Main {
+	
+	
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		String s1;
+		s1 = scanner.next();
+		char []ch=new char[100];
+		int size=-1,i;
+		for(i=0;i<s1.length();i++) {
+			if(s1.charAt(i)>'0'&&s1.charAt(i)<'9')System.out.printf("%c",s1.charAt(i));
+			else {
+				break;
+			}
+		}
+		for(int j=i;j<s1.length();j++) {
+			if(s1.charAt(j)>'0'&&s1.charAt(j)<'9') {
+				if(s1.charAt(j-1)>'0'&&s1.charAt(j-1)<'9')System.out.printf("%c",s1.charAt(j));
+				else {
+					System.out.printf(" %c",s1.charAt(j));
+				}
+			}
+			if (s1.charAt(j)=='-') {
+				if((s1.charAt(j-1)>'0'&&s1.charAt(j-1)<'9')||s1.charAt(j-1)==')') {
+					if(size>=0&&(ch[size]=='*'||ch[size]=='/')) {
+						while(size>=0&&ch[size]!='(') {
+							System.out.printf(" %c",ch[size--]);
+						}
+					}
+						ch[++size]='-';
+					
+				}
+				else {
+					System.out.printf(" -");
+					while(s1.charAt(j+1)>'0'&&s1.charAt(j+1)<'9') {
+						System.out.printf("%c",s1.charAt(++j));
+					}
+				}
+			}
+			if(s1.charAt(j)=='+') {
+				if(size>=0&&(ch[size]=='*'||ch[size]=='/')) {
+					while(size>=0&&ch[size]!='(') {
+						System.out.printf(" %c",ch[size--]);
+					}
+				}
+					ch[++size]='+';
+				
+			}
+			if(s1.charAt(j)=='*') {
+				ch[++size]='*';
+			}
+			if(s1.charAt(j)=='/') {
+				ch[++size]='/';
+			}
+			if(s1.charAt(j)=='(') {
+				ch[++size]='(';
+			}
+			if(s1.charAt(j)==')') {
+				while(ch[size]!='(') {
+					System.out.printf(" %c",ch[size--]);
+				}
+				size--;
+			}
+		}
+		for(int j=size;j>=0;j--){
+			System.out.printf(" %c",ch[j]);
+		}
+	}
+}
